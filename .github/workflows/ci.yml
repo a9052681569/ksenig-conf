@@ -29,8 +29,8 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
-      # - name: Копируем конфиг
-      #   run: scp -F staging -r . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:.
+      - name: Копируем конфиг
+        run: scp -F staging -r . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:docker
 
       - name: Ребутим сервисы
         run: ssh staging 'docker-compose restart'
