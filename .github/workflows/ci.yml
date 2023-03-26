@@ -6,8 +6,7 @@ on:
       - "main"
 
 jobs:
-  trigger-deploy:
-    needs: build-and-publish-image
+  deploy:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
