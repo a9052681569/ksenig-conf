@@ -1,0 +1,51 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  trigger-deploy:
+    needs: build-and-publish-image
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/staging.key
+          chmod 600 ~/.ssh/staging.key
+          cat >>~/.ssh/config <<END
+          Host staging
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/staging.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+
+      - name: Копируем конфиг
+        run: scp -F staging -r . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:.
+
+      - name: Ребутим сервисы
+        run: ssh staging 'docker-compose restart'
+
+      - name: Ставим таймер на обновление сертификата SSL
+        run: ssh staging 'SLEEPTIME=$(awk 'BEGIN{srand(); print int(rand()*(3600+1))}'); echo "0 0,12 * * * root sleep $SLEEPTIME && docker-compose run --rm certbot renew" | sudo tee -a /etc/crontab > /dev/null'
+      # - name: Run command on remote server
+      #   uses: D3rHase/ssh-command-action@v0.2.2
+      #   with:
+      #     host: ${{secrets.SSH_HOST}}
+      #     user: ${{secrets.SSH_USER}}
+      #     private_key: ${{secrets.SSH_PRIVATE_KEY}}
+      #     command: |
+      #       docker-compose pull;
+      #       docker-compose up -d --build;
+      #       docker-compose restart;
+      #       SLEEPTIME=$(awk 'BEGIN{srand(); print int(rand()*(3600+1))}'); echo "0 0,12 * * * root sleep $SLEEPTIME && docker-compose run --rm certbot renew" | sudo tee -a /etc/crontab > /dev/null;
