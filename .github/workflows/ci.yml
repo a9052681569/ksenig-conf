@@ -30,7 +30,7 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
       - name: Копируем конфиг
-        run: rsync -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no" --archive --compress --delete . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:.
+        run: rsync -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no" . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:.
 
       - name: Ребутим сервисы
         run: ssh staging 'docker-compose restart'
