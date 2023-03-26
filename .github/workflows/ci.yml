@@ -22,7 +22,7 @@ jobs:
             HostName $SSH_HOST
             User $SSH_USER
             IdentityFile ~/.ssh/id_ed25519
-            StrictHostKeyChecking yes
+            StrictHostKeyChecking no
           END
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
@@ -30,7 +30,13 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
       - name: Копируем конфиг
-        run: rsync -e "ssh staging" . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:.
+        uses: a9052681569/ssh-copy-action
+        with:
+          host: ${{secrets.SSH_HOST}}
+          user: ${{secrets.SSH_USER}}
+          private_key: ${{secrets.SSH_PRIVATE_KEY}}
+          from: ./
+          to: ./
 
       - name: Ребутим сервисы
         run: ssh staging 'docker-compose restart'
