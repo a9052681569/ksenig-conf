@@ -30,7 +30,7 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
       - name: Копируем конфиг
-        uses: a9052681569/ssh-copy-action@3
+        uses: a9052681569/ssh-copy-action@4
         with:
           host: ${{secrets.SSH_HOST}}
           user: ${{secrets.SSH_USER}}
