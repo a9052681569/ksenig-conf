@@ -30,13 +30,14 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
       - name: Копируем конфиг
-        uses: garygrossgarten/github-action-scp@release
+        uses: appleboy/scp-action@master
         with:
-          local: .
-          remote: .
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: './*'
+          target: './'
+        env:
+          USERNAME: ${{ secrets.SSH_USER }}
+          HOST: ${{ secrets.SSH_HOST }}
+          KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Ребутим сервисы
         run: ssh staging 'docker-compose restart'
