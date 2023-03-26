@@ -30,17 +30,7 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
       - name: Копируем конфиг
-        uses: appleboy/scp-action@master
-        with:
-          source: './*'
-          target: './'
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-        # env:
-        #   USERNAME: ${{ secrets.SSH_USER }}
-        #   HOST: ${{ secrets.SSH_HOST }}
-        #   KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: rsync -e "ssh -p 22 -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no" --archive --compress --delete . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:.
 
       - name: Ребутим сервисы
         run: ssh staging 'docker-compose restart'
