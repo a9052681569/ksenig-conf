@@ -29,14 +29,12 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
-      # - name: Копируем конфиг
-      #   run: scp -F ~/.ssh/config -r . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:.
+      - name: Копируем конфиг
+        run: scp -r . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:.
 
       - name: Ребутим сервисы
         run: ssh staging 'docker-compose restart'
 
-      - name: Ставим таймер на обновление сертификата SSL
-        run: ssh staging 'SLEEPTIME=$(awk 'BEGIN{srand(); print int(rand()*(3600+1))}'); echo "0 0,12 * * * root sleep $SLEEPTIME && docker-compose run --rm certbot renew" | sudo tee -a /etc/crontab > /dev/null'
       # - name: Run command on remote server
       #   uses: D3rHase/ssh-command-action@v0.2.2
       #   with:
