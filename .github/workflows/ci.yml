@@ -22,7 +22,7 @@ jobs:
             HostName $SSH_HOST
             User $SSH_USER
             IdentityFile ~/.ssh/id_ed25519
-            StrictHostKeyChecking no
+            StrictHostKeyChecking yes
           END
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
