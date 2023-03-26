@@ -34,10 +34,13 @@ jobs:
         with:
           source: './*'
           target: './'
-        env:
-          USERNAME: ${{ secrets.SSH_USER }}
-          HOST: ${{ secrets.SSH_HOST }}
-          KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+        # env:
+        #   USERNAME: ${{ secrets.SSH_USER }}
+        #   HOST: ${{ secrets.SSH_HOST }}
+        #   KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Ребутим сервисы
         run: ssh staging 'docker-compose restart'
