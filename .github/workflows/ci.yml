@@ -48,7 +48,7 @@ jobs:
           target: "~/docker"
 
       - name: Стягиваем докер образы
-        run: ssh staging 'docker-compose pull;'
+        run: ssh staging 'docker-compose pull'
 
       - name: Билдим контейнер
         run: ssh staging 'docker-compose up -d --build'

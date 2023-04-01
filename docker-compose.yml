@@ -1,8 +1,8 @@
 version: '3.8'
 services:  
   be:    
-    image: a9052681569/ksenig-be
-    # build: ../ksenig-be
+    # image: a9052681569/ksenig-be
+    build: ../ksenig-be
     depends_on:
       - mongodb
     container_name: be   
@@ -20,6 +20,7 @@ services:
     restart: always
   mongodb:
     image: mongo:latest
+    container_name: mongodb  
     ports:
       - 27017:27017
     volumes:
