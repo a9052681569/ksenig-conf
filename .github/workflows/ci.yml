@@ -49,13 +49,7 @@ jobs:
 
       - name: Устанавливаем переменные окружения
         if: ${{github.repository == 'a9052681569/ksenig-conf'}}
-        uses: D3rHase/ssh-command-action@v0.2.2
-        with:
-          host: ${{secrets.SSH_HOST}}
-          user: ${{secrets.SSH_USER}}
-          private_key: ${{secrets.SSH_PRIVATE_KEY}}
-          command: |
-            export JWT_SECRET=${{ secrets.JWT_SECRET }}
+        run: ssh staging 'cd ~/docker && export JWT_SECRET=${{ secrets.JWT_SECRET }}'
 
       - name: Стягиваем докер образы
         run: ssh staging 'cd ~/docker && docker-compose pull'
@@ -66,14 +60,6 @@ jobs:
       - name: Ребутим сервисы (помогает не получать баги при пересборке)
         run: ssh staging 'cd ~/docker && docker-compose restart'
 
-      - name: Запускаем таймер на обновление сертификата ssl
-        uses: D3rHase/ssh-command-action@v0.2.2
-        with:
-          host: ${{secrets.SSH_HOST}}
-          user: ${{secrets.SSH_USER}}
-          private_key: ${{secrets.SSH_PRIVATE_KEY}}
-          command: |
-            export JWT_SECRET=${{ secrets.JWT_SECRET }}
       - name: Запускаем таймер на обновление сертификата ssl
         uses: D3rHase/ssh-command-action@v0.2.2
         with:
