@@ -25,7 +25,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - ../ksenig-data:/data/db
+      - ./data:/data/db
     restart: always
   nginx:
     image: nginx:latest
