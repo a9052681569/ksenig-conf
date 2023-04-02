@@ -49,7 +49,7 @@ jobs:
 
       - name: Устанавливаем переменные окружения
         if: ${{github.repository == 'a9052681569/ksenig-conf'}}
-        run: ssh staging 'cd ~/docker && export JWT_SECRET=${{ secrets.JWT_SECRET }}'
+        run: ssh staging 'cd ~/docker && export JWT_SECRET=hello'
 
       - name: Стягиваем докер образы
         run: ssh staging 'cd ~/docker && docker-compose pull'
