@@ -41,6 +41,7 @@ jobs:
         run: |
           echo \ >> .env
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
+          echo CREATE_USER_SECRET=${{ secrets.CREATE_USER_SECRET }} >> .env
 
       - name: Копируем файлы
         if: ${{github.repository == 'a9052681569/ksenig-conf'}}
