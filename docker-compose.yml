@@ -11,6 +11,7 @@ services:
     restart: always
     environment:
       - DB_HOST=mongodb
+      - JWT_SECRET
   fe:
     image: a9052681569/ksenig-web
     # build: ../ksenig-web
