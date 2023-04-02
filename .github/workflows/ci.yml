@@ -39,6 +39,7 @@ jobs:
       
       - name: Создаем .env файл
         run: |
+          echo \ >> .env
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
 
       - name: Копируем файлы
