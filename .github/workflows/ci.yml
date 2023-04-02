@@ -36,6 +36,10 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
+      
+      - name: Создаем .env файл
+        run: |
+          echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
 
       - name: Копируем файлы
         if: ${{github.repository == 'a9052681569/ksenig-conf'}}
@@ -46,18 +50,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "."
           target: "~/docker"
-      - name: executing remote ssh commands to set env
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            export JWT_SECRET=hello
-
-      # - name: Устанавливаем переменные окружения
-      #   if: ${{github.repository == 'a9052681569/ksenig-conf'}}
-      #   run: ssh staging 'cd ~/docker && export JWT_SECRET=hello'
 
       - name: Стягиваем докер образы
         run: ssh staging 'cd ~/docker && docker-compose pull'
